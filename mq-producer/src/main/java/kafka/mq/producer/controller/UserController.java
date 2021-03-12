@@ -11,6 +11,11 @@ public class UserController {
   @Autowired
   private KafkaProducer kafkaProducer;
 
+  @GetMapping("/")
+  public String hello(){
+    return "hello world===>444";
+  }
+
   @GetMapping("/send")
   public String sendMessage(){
     User user = new User();

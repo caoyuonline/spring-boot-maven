@@ -5,6 +5,7 @@
   <groupId>com.tesa.kafka</groupId>
   <artifactId>mq-producer</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
   <name>mq-producer</name>
   <description>Demo project for Spring Boot</description>
 
@@ -42,10 +43,34 @@
 
   <build>
     <plugins>
+      <!-- docker镜像构建插件 -->
       <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
+          <groupId>com.spotify</groupId>
+          <artifactId>docker-maven-plugin</artifactId>
+          <version>0.4.11</version>
+          <configuration>
+            <!-- 构建后的镜像名字 -->
+            <imageName>${project.artifactId}</imageName>
+            <!-- dockerfile所在位置 -->
+            <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+
+            <resources>
+              <resource>
+                <targetPath>/</targetPath>
+                <directory>${project.build.directory}</directory>
+                <!--
+              因为我们要部署到Docker容器的是这个应用jar，而target目录下有很多是打包时候生成的文件，
+              对于我们这个应用jar来说没有任何作用，
+              所以，我们需要使用include标签来指定我们需要构建镜像时候所需的文件。不然的话
+              会把target目录下所有文件都打包到容器中，就会出现很多无用文件，让镜像大小变得很大。
+             -->
+                <include>${project.artifactId}-${project.version}.jar</include>
+              </resource>
+            </resources>
+          </configuration>
+
       </plugin>
+
     </plugins>
   </build>
 

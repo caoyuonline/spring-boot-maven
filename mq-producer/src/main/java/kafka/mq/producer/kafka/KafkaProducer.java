@@ -14,7 +14,7 @@ public class KafkaProducer {
   @Resource
   private KafkaTemplate<String ,String> kafkaTemplate;
 
-  @Value("${kafka.topic.user}")
+  @Value("${spring.kafka.topic.user}")
   private String topicUser;
 
   public void sendUserMessage(User user){
